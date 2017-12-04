@@ -7,7 +7,7 @@ import java.io.*;
  *
  */
 public class MainThread extends MyMessageThread {
-    // Constantes
+    // Constantes.
     //public static final String PATH_INTPUT = System.getProperty("java.home")+"/data/in/";
     //public static final String PATH_OUTPUT = System.getProperty("java.home")+"/data/out/";
     public static final String PATH_INTPUT = "/Users/mmignoni/Desktop/teste/";
