@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="MyFirstJavaCode:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MyFirstJavaCode_jar</output-path>
+    <root id="archive" name="MyFirstJavaCode.jar">
+      <element id="module-output" name="MyFirstJavaCode" />
+    </root>
+  </artifact>
+</component>
