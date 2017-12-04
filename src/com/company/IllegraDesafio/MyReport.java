@@ -43,7 +43,7 @@ public class MyReport {
      * Construtor
      *
      *******************************************************************************************************************/
-    MyReport(String name){
+    public MyReport(String name){
         this.fileName   = name;
 
         this.LstCostumers = new LinkedList<Costumer>();
