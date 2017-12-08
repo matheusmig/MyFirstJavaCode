@@ -63,7 +63,7 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
     private MyAsyncServerTCPListener mListener = null;
 
     //Constantes
-    private static final int HEARTBEAT_INTERVAL_SECONDS = 10;
+    private static final int HEARTBEAT_INTERVAL_SECONDS = 60;
 
     /*******************************************************************************************************************
      *
@@ -71,8 +71,6 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
      *
      *******************************************************************************************************************/
     public MyAsyncServerTCP() {
-        System.out.println("initializing server");
-
         lstClients = new LinkedList<>();
 
         //Configura timer de alive
@@ -80,12 +78,15 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
         AliveTimer.scheduleWithFixedDelay(new CheckAliveClients(this.lstClients), 0, HEARTBEAT_INTERVAL_SECONDS, TimeUnit.SECONDS);
     }
 
+
     /*******************************************************************************************************************
      *
      * Método principal - inicia server
      *
      *******************************************************************************************************************/
     public void run(){
+        System.out.println("Initializing server at port: "+String.valueOf(serverPort));
+
         try {
             this.server = ServerSocketChannel.open(); // Abre o ServerSocketChannel
             this.server.configureBlocking(false);     // Obrigatoriamente deve-se configurar como non-blocking, senao nao poderia registrar no seletor
@@ -127,8 +128,9 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
         }
     }
 
-    public int  getMaxClients() { return this.maxClients; }
-    public void setMaxClientes(int value){ this.maxClients = value;}
+    public int  getMaxClients() { return this.maxClients;}
+    public void setServerPort (int value){ this.serverPort = value; }
+    public void setMaxClientes(int value){ this.maxClients = value; }
 
     /*******************************************************************************************************************
      *
@@ -164,7 +166,6 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
         for(MyAsyncServerTCPClient client: lstClients){
             client.send(data);
         }
-
     }
 
     /*******************************************************************************************************************
@@ -189,7 +190,7 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
 
                     } else {
                         //Send heartbeat
-                        client.send("vivo");
+                        client.send("vivo"+ System.lineSeparator());
                     }
 
                 }
@@ -232,8 +233,6 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
                 // Chama evento para listener
                 if (mListener != null)
                     mListener.onClientConnect(client);
-
-                broadcast("now we have " + String.valueOf(clientCount()) + " client(s)");
             } else {
                 //Servidor lotado, derruba cliente
                 clientChannel.close();

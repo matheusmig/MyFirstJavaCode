@@ -8,5 +8,10 @@ public class Main {
 
         MyServerTCP a = new MyServerTCP();
 
+        //TODO:
+        // Thread de event writer (log)
+        // Ler configuraÇões de arquivo de configuração (porta TCP)
+
+
     }
 }
