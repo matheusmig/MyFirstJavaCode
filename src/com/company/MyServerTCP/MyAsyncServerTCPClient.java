@@ -15,7 +15,7 @@ import java.time.temporal.ChronoUnit;
  */
 public class MyAsyncServerTCPClient{
 
-    private SocketChannel channel        = null;  //Canal do socket client
+    protected SocketChannel channel        = null;  //Canal do socket client
     private Selector      demultiplexer  = null;  //Seletor
 
     private LocalDateTime lastData       = LocalDateTime.now();  //Hora do último dado recebido do cliente

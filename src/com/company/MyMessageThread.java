@@ -46,7 +46,7 @@ public class MyMessageThread extends Thread {
      *
      *******************************************************************************************************************/
     public void runCreate() {
-
+        System.out.print("Metodo runCreate");
     }
 
     /*******************************************************************************************************************
@@ -55,10 +55,8 @@ public class MyMessageThread extends Thread {
      *
      *******************************************************************************************************************/
     public void runDestroy() {
-
+        System.out.print("Metodo runDestroy");
     }
-
-
 
     private synchronized MyMessage GetMessage(){
         MyMessage msg;

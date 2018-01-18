@@ -1,5 +1,6 @@
 package com.company.MyServerTCP;
 
+import com.company.Main;
 import com.company.PatternReactor.AcceptSocketEventHandler;
 import com.company.PatternReactor.Reactor;
 import com.company.PatternReactor.ReadSocketEventHandler;
@@ -63,7 +64,7 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
     private MyAsyncServerTCPListener mListener = null;
 
     //Constantes
-    private static final int HEARTBEAT_INTERVAL_SECONDS = 60;
+    private static final int HEARTBEAT_INTERVAL_SECONDS = 30;
 
     /*******************************************************************************************************************
      *
@@ -75,7 +76,7 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
 
         //Configura timer de alive
         this.AliveTimer = Executors.newScheduledThreadPool(1);
-        AliveTimer.scheduleWithFixedDelay(new CheckAliveClients(this.lstClients), 0, HEARTBEAT_INTERVAL_SECONDS, TimeUnit.SECONDS);
+        this.AliveTimer.scheduleWithFixedDelay(new CheckAliveClients(this.lstClients), 0, HEARTBEAT_INTERVAL_SECONDS, TimeUnit.SECONDS);
     }
 
 
@@ -85,7 +86,7 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
      *
      *******************************************************************************************************************/
     public void run(){
-        System.out.println("Initializing server at port: "+String.valueOf(serverPort));
+        Main.getWriter().WriteMsg("MyAsyncServerTCP : Initializing server at port: "+String.valueOf(serverPort));
 
         try {
             this.server = ServerSocketChannel.open(); // Abre o ServerSocketChannel
@@ -122,6 +123,7 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
         ////////////////////////////////////////////////////////////////
         // Verifica se a classe passada como parâmetro extende MyAsyncServerTCPClient
         if (MyAsyncServerTCPClient.class.isAssignableFrom(clientClass)){
+            Main.getWriter().WriteMsg("MyAsyncServerTCP.setClientClass : "+clientClass.toString());
             this.clientClass = clientClass;
         } else {
             throw new Exception("MyAsyncServerTCP.setClientClass : "+clientClass.toString()+ " do NOT extends MyAsyncServerTCPClient");
@@ -184,7 +186,7 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
             try {
                 for (MyAsyncServerTCPClient client : this.lstClients) {
                     if (client.secondsSinceLastSignal() > HEARTBEAT_INTERVAL_SECONDS * 3) {
-                        System.out.println("Client " + client.address() + " disconnect by alive timer");
+                        Main.getWriter().WriteMsg("Client " + client.address() + " disconnect by alive timer");
 
                         client.close();
 
@@ -195,7 +197,7 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
 
                 }
             } catch (Exception e){
-                System.out.println("EXCEPTION: CheckAliveClients " +e.getMessage());
+                Main.getWriter().WriteErrorMsg("EXCEPTION : CheckAliveClients " +e.getMessage());
             }
         }
     }
@@ -210,7 +212,6 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
             if ((this.maxClients <= 0) || (clientCount() < this.maxClients)) {
                 /////////////////////////////////////////////////////////////////////
                 // Instancia cliente e guarda na lista
-
                 MyAsyncServerTCPClient client;
 
                 ///////////////////////////////////////////////////////////////////
@@ -257,7 +258,7 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
             // Remove referência do cliente da lista
             lstClients.remove(client);
         } else {
-            System.out.println("Cliente desconectado e não encontrado "+clientChannel.toString());
+            Main.getWriter().WriteMsg("MyAsyncServerTCP.onClientDisconnectReactor : Cliente desconectado e não encontrado "+clientChannel.toString());
         }
     }
 
@@ -272,7 +273,7 @@ public class MyAsyncServerTCP implements Reactor.ReactorEventListener{
             client.receive(data);
 
         } else {
-            System.out.println("Cliente não encontrado "+clientChannel.toString());
+            Main.getWriter().WriteMsg("MyAsyncServerTCP.onClientDisconnectReactor : Cliente não encontrado "+clientChannel.toString());
         }
     }
 

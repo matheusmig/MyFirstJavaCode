@@ -1,6 +1,7 @@
 package com.company.MyServerTCP;
 
 import com.company.ClientTCPEchoMd5;
+import com.company.Main;
 
 /**
  * Created by mmignoni on 2017-11-27.
@@ -26,7 +27,6 @@ public class MyServerTCP implements MyAsyncServerTCP.MyAsyncServerTCPListener {
             e.printStackTrace();
         }
         asyncServerTCP.run();
-
     }
 
     /*******************************************************************************************************************
@@ -35,12 +35,12 @@ public class MyServerTCP implements MyAsyncServerTCP.MyAsyncServerTCPListener {
      *
      *******************************************************************************************************************/
     public void onClientConnect(MyAsyncServerTCPClient client){
-        System.out.println("New client connected: "+client.address());
+        Main.getWriter().WriteMsg("MyServerTCP.onClientConnect : New client connected : "+client.address());
 
     }
 
     public void onClientDisconnect(MyAsyncServerTCPClient client){
-        System.out.println("Cliente desconectado "+client.address());
+        Main.getWriter().WriteMsg("MyServerTCP.onClientDisconnect : Disconnected Client : "+client.address());
     }
 
 }
